@@ -3,6 +3,7 @@ import { By } from "@angular/platform-browser";
 import { DebugElement } from "@angular/core";
 
 import { BannerComponent } from './banner.component';
+import { ComponentFixtureAutoDetect } from "@angular/core/testing";
 
 describe('BannerComponent', () => {
     let component: BannerComponent;
@@ -12,7 +13,10 @@ describe('BannerComponent', () => {
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [ BannerComponent ]
+            declarations: [ BannerComponent ],
+            providers: [
+                { provide: ComponentFixtureAutoDetect, useValue: true }
+            ]
         })
             .compileComponents();
     }));
@@ -29,17 +33,22 @@ describe('BannerComponent', () => {
     });
 
     it('should display original title', () => {
-        fixture.detectChanges();
         expect(el.textContent).toContain(component.title);
     });
 
-    it('should display a different test title', () => {
+    it('should still see original title after component.title change', () => {
+        let oldTitle = el.title;
+        component.title = "Test Title";
+        expect(el.textContent).toContain(oldTitle);
+    });
+
+    it('should display updated title after detectChanges', () => {
         component.title = "Test Title";
         fixture.detectChanges();
-        expect(el.textContent).toContain("Test Title");
+        expect(el.textContent).toEqual(component.title);
     });
 
     it('no title in the DOM until manually call `detectChanges`', () => {
-        expect(el.textContent).toEqual('');
+        expect(el.textContent).not.toEqual('');
     });
 });
