@@ -22,7 +22,6 @@ describe('BannerComponent', () => {
         component = fixture.componentInstance;
         de = fixture.debugElement.query(By.css('h1'));
         el = de.nativeElement;
-        fixture.detectChanges();
     });
 
     it('should create', () => {
@@ -38,5 +37,9 @@ describe('BannerComponent', () => {
         component.title = "Test Title";
         fixture.detectChanges();
         expect(el.textContent).toContain("Test Title");
+    });
+
+    it('no title in the DOM until manually call `detectChanges`', () => {
+        expect(el.textContent).toEqual('');
     });
 });
